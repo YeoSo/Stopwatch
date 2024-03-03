@@ -1,12 +1,29 @@
 from tkinter import *
 
 
-# 1. display time start from 00:00:00 (hr, min, sec)
-# 2. start, pause, reset button
-
 # ------------------------------ MECHANISM ------------------------------------ #
 def start_button():
-    pass
+    count()
+
+
+def count():
+    global elapsed_time
+    # Convert elapsed time to hours, minutes, seconds
+    hours = int(elapsed_time / 3600)
+    minutes = int((elapsed_time % 3600) / 60)
+    seconds = int(elapsed_time % 60)
+
+    # Format the time as a string
+    time_string = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+    # Update the time on the canvas
+    canvas.itemconfig(time_text, text=time_string)
+
+    # Increment elapsed time
+    elapsed_time += 1
+
+    # Call count() again after 1 second
+    window.after(1000, count)
 
 
 # ------------------------------- UI SETUP ------------------------------------ #
@@ -16,10 +33,14 @@ window.title("Stopwatch")
 canvas = Canvas(width=900, height=600, bg="black")
 time_text = canvas.create_text(450, 240, text="00:00:00", fill="white", font=("NORMAL", 120))
 second_text = canvas.create_text(460, 350, text="hr           min          sec", fill="white", font=("NORMAL", 35))
-canvas.grid(column=0, row=0)
+canvas.grid(column=0, row=0, columnspan=2)
 
 # Buttons
-# start_button = Button(text="Start", command=start_button)
-# start_button.grid(column=0, row=0)
+start_button = Button(window, text="▶", command=start_button, font=("NORMAL", 30))
+canvas.create_window(330, 450, window=start_button)
+elapsed_time = 0
 
 window.mainloop()
+
+# TODO 1. fix the possible error occurring when the time change after 00:59:59
+# TODO 2. Add reset button
