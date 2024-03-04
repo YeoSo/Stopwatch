@@ -40,7 +40,12 @@ start_button = Button(window, text="▶", command=start_button, font=("NORMAL", 
 canvas.create_window(330, 450, window=start_button)
 elapsed_time = 0
 
+pause_button = Button(window, text="⏸", font=("NORMAL", 30))
+canvas.create_window(450, 450, window=pause_button)
+
+reset_button = Button(window, text="↺", font=("NORMAL", 30))
+canvas.create_window(570, 450, window=reset_button)
+
 window.mainloop()
 
-# TODO 1. fix the possible error occurring when the time change after 00:59:59
-# TODO 2. Add reset button
+# TODO: Add functions for pause button and reset button
