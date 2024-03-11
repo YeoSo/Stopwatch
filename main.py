@@ -1,16 +1,21 @@
 from tkinter import *
+import time
 
 
 # ------------------------------ MECHANISM ------------------------------------ #
 def start_button():
-    global running
-    running = True
-    count()
+    global start_time, running, elapsed_time
+    if not running:
+        start_time = time.time() - elapsed_time
+        running = True
+        toggle_buttons()
+        count()
 
 
 def pause_button():
     global running
     running = False
+    toggle_buttons()
 
 
 def reset_button():
@@ -22,21 +27,10 @@ def reset_button():
 def count():
     global elapsed_time, running
     if running:
-        # Convert elapsed time to hours, minutes, seconds
-        hours = int(elapsed_time / 3600)
-        minutes = int((elapsed_time % 3600) / 60)
-        seconds = int(elapsed_time % 60)
-
-        # Format the time as a string
-        time_string = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-
-        # Update the time on the canvas
-        canvas.itemconfig(time_text, text=time_string)
-
-        # Increment elapsed time
-        elapsed_time += 1
-
-        # Call count() again after 1 second
+        current_time = time.time()
+        elapsed_time = current_time - start_time
+        formatted_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
+        canvas.itemconfig(time_text, text=formatted_time)
         window.after(1000, count)
 
 
@@ -62,6 +56,18 @@ canvas.create_window(570, 450, window=reset_button)
 
 elapsed_time = 0
 running = False
+start_time = 0
+
+
+def toggle_buttons():
+    if running:
+        start_button.config(state=DISABLED)
+        pause_button.config(state=NORMAL)
+    else:
+        start_button.config(state=NORMAL)
+        pause_button.config(state=DISABLED)
+
+
+toggle_buttons()
 
 window.mainloop()
-
